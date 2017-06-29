@@ -8,4 +8,4 @@ logger = logging.getLogger(__name__)
 user_email = config['bitbucket']['email']
 user_password = config['bitbucket']['password']
 
-logger.debug("{}: {}".format(user_email, user_password))
+logger.debug("{}:{}".format(user_email, user_password))
