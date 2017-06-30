@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=invalid-name, no-value-for-parameter, unexpected-keyword-arg
 import os
+import re
+import commands
 
 import click
 import arrow
 
 from git_ext.utils import logging
-from git_ext.git import get_repo_slug
+from git_ext.git import get_repo_slug, get_git_core_editor, get_dotgit_abs_path
 from git_ext.bitbucket.pullrequests import PullRequests
 
 logger = logging.getLogger(__name__)
@@ -40,6 +42,23 @@ def activity(ctx, id):
         click.echo(click.style("{} {} this PR:".format(activity[2], activity[0]), fg='yellow'))
         click.echo(activity[3])
 
+@pullrequests.command()
+@click.pass_context
+@click.argument('source_branch')
+@click.argument('destination_branch')
+def create(ctx, source_branch, destination_branch):
+    logger.info("base branch: {}, head branch: {}".format(source_branch, destination_branch))
+    temp_submit_file = os.path.join(get_dotgit_abs_path(), '.git_ext.temp')
+    os.system(get_git_core_editor() + " " + temp_submit_file)
+    with open(temp_submit_file, 'r') as commit_file:
+        lines = commit_file.readlines()
+        title = lines[0]
+        desc = "".join(lines[1:])
+    os.remove(temp_submit_file)
+    reviewers_raw = raw_input("Reviewers(start with @):")
+    reviewers = "".join(reviewers_raw.split()).split('@')[1:]  # thy there is a space??
+    prs = ctx.obj['prs']
+    prs.create(source_branch, destination_branch, reviewers, title, desc)
 
 if __name__ == '__main__':
     pullrequests(obj={})

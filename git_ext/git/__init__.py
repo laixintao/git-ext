@@ -3,7 +3,8 @@
 import os
 import re
 import commands
-from git_ext.utils import logging
+from git_ext.utils import logging, read_config
+
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +12,9 @@ def get_repo_abspath():
     status, repo_abspath = commands.getstatusoutput('git rev-parse --show-toplevel')
     return repo_abspath
 
+def get_dotgit_abs_path():
+    repo_abspath = get_repo_abspath()
+    return os.path.join(repo_abspath, '.git')
 
 def get_repo_slug():
     repo_abspath = get_repo_abspath()
@@ -22,3 +26,8 @@ def get_repo_slug():
         username = matcher.group(1)
         logger.info("username: {}, repo_slug: {}".format(username, repo_slug))
     return username, repo_slug
+
+def get_git_core_editor():
+    editor = commands.getoutput('git config --global core.editor')
+    logger.debug("Core editor: {}".format(editor))
+    return editor

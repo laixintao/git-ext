@@ -18,11 +18,11 @@ class PullRequests(object):
         self.repo_slug = repo_slug
         logger.debug("username: {}, resp_slug: {}".format(
             self.username, self.repo_slug))
-        logger.debug(urls.PULLREQUESTS)
         self.pullrequests_url = urls.PULLREQUESTS.format(
             username=self.username,
             repo_slug=self.repo_slug)
-        self.pullrequests = self.update_pullrequests()
+        self.pullrequests = []
+        self.is_requests_updated = False
 
     def update_pullrequests(self):
         "Only open prs by default"
@@ -31,7 +31,32 @@ class PullRequests(object):
         # TODO Turn page
         return resp['values']
 
+    def create(self, source, dest, reviewers, title, desc):
+        repo = "/".join([self.username, self.repo_slug])
+        post_data = {
+            'title': title,
+            'description': desc,
+            'source': {
+                'branch': {'name': source},
+                'repository': {'full_name': repo}},
+            'destination': {
+                'branch': {'name': dest}},
+            'reviewers':[
+                {'username': username} for username in reviewers],
+            'close_source_branch': True
+        }
+        json_data = json.dumps(post_data)
+        logger.info(json_data)
+        resp = requests.post(urls.PULLREQUESTS.format(
+            username=self.username,
+            repo_slug=self.repo_slug), auth=user_auth,
+            data=post_data)
+        logger.info(resp.status_code)
+        logger.info(resp.json())
+
     def pullrequests_list(self):
+        if not self.is_requests_updated:
+            self.update_pullrequests()
         return [(pr['id'], pr['title'], pr['author']['username'], pr['created_on']) for pr in self.pullrequests]
 
     def pullrequests_activity(self, pr_id):

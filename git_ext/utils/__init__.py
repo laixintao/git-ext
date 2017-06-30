@@ -2,6 +2,7 @@
 
 import logging
 import os
+import commands
 import yaml
 
 
@@ -10,7 +11,6 @@ def read_config():
     with open(config_file_path) as config_file:
         config = yaml.load(config_file)
     return config
-
 
 def get_gitext_config():
     config_file = read_config()
@@ -23,5 +23,6 @@ def config_log():
     else:
         level = logging.ERROR
     logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
+
 
 config_log()
