@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# pylint: disable=invalid-name
-
-from __future__ import unicode_literals
-
+# pylint: disable=invalid-name, no-value-for-parameter, unexpected-keyword-arg
 import os
 
 import click
@@ -15,17 +12,24 @@ from git_ext.bitbucket.pullrequests import PullRequests
 logger = logging.getLogger(__name__)
 current_path = os.getcwd()
 
+
 @click.group()
-def pullrequests():
-    pass
+@click.option('--debug/--no-debug', default=False, envvar='REPO_DEBUG')
+@click.pass_context
+def pullrequests(ctx, debug):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+    username, repo_slug = get_repo_slug()
+    ctx.obj['prs'] = PullRequests(username, repo_slug)
+
 
 @pullrequests.command()
-def list():
-    username, repo_slug = get_repo_slug()
-    prs = PullRequests(username, repo_slug)
+@click.pass_context
+def list(ctx):
+    prs = ctx.obj['prs']
     for pr in prs.pullrequests_list():
-        click.echo("#{} {}".format(*pr))
+        click.echo(u"#{} {}".format(*pr))
 
 
 if __name__ == '__main__':
-    pullrequests()
+    pullrequests(obj={})

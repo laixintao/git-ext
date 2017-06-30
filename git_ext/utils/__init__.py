@@ -4,7 +4,7 @@ import logging
 import os
 import yaml
 
-logging.basicConfig(level=logging.DEBUG, format='%(name)s\t - %(message)s')
+logging.basicConfig(level=logging.ERROR, format='%(name)s\t - %(message)s')
 
 logger = logging.getLogger(__name__)
 
