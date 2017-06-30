@@ -14,11 +14,8 @@ current_path = os.getcwd()
 
 
 @click.group()
-@click.option('--debug/--no-debug', default=False, envvar='REPO_DEBUG')
 @click.pass_context
-def pullrequests(ctx, debug):
-    if debug:
-        logging.basicConfig(level=logging.DEBUG)
+def pullrequests(ctx):
     username, repo_slug = get_repo_slug()
     ctx.obj['prs'] = PullRequests(username, repo_slug)
 
