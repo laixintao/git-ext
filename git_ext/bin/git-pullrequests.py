@@ -4,6 +4,7 @@
 import os
 
 import click
+import arrow
 
 from git_ext.utils import logging
 from git_ext.git import get_repo_slug
@@ -26,6 +27,15 @@ def list(ctx):
     prs = ctx.obj['prs']
     for pr in prs.pullrequests_list():
         click.echo(u"#{} {}".format(*pr))
+
+@pullrequests.command()
+@click.pass_context
+@click.option('--id', '-i', help="pullrequests' id")
+def activity(ctx, id):
+    prs = ctx.obj['prs']
+    for activity in prs.pullrequests_activity(id):
+        click.echo(arrow.get(activity[1]).humanize()+'->')
+        click.echo("\t{} {}: {}".format(activity[2], activity[0], activity[3]))
 
 
 if __name__ == '__main__':

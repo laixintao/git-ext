@@ -34,6 +34,33 @@ class PullRequests(object):
     def pullrequests_list(self):
         return [(pr['id'], pr['title']) for pr in self.pullrequests]
 
+    def pullrequests_activity(self, pr_id):
+        # TODO turn page use next
+        resp = requests.get(urls.PULLREQUEST_ID_ACTIVITY.format(
+            username=self.username,
+            repo_slug=self.repo_slug,
+            pull_request_id=pr_id), auth=user_auth).json()
+        activities = []
+        for activity in resp['values']:
+            if 'comment' in activity:
+                activities.append(('comment',
+                                   activity['comment']['created_on'],
+                                   activity['comment']['user']['username'],
+                                   activity['comment']['content']['raw'],))
+            elif 'update' in activity:
+                activities.append(('update',
+                                   activity['update']['date'],
+                                   activity['update']['author']['username'],
+                                   '[' + activity['update']['state'] + ']' + activity['update']['title']))
+            elif 'approval' in activity:
+                activities.append(('approve',
+                                   activity['approval']['date'],
+                                   activity['approval']['user']['username'],
+                                   "Nice work!"))
+            else:
+                logger.info(activity)
+        return activities
+
 
 if __name__ == '__main__':
     pr = PullRequests('deepanalyzer', 'yorg')
