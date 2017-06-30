@@ -18,14 +18,10 @@ def get_gitext_config():
     return gitext_config
 
 def config_log():
-    gitext_config = get_gitext_config()
-    if not gitext_config:
-        return
-    logging_config = gitext_config.get('logging')
-    if logging_config:
-        logging.basicConfig(level=logging_config.get('level'),
-                            format=logging_config.get('format'))
+    if os.getenv('GITEXT') == 'debug':
+        level = logging.DEBUG
     else:
-        logging.basicConfig(level=logging.ERROR, format='%(name)s\t - %(message)s')
+        level = logging.ERROR
+    logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
 
 config_log()

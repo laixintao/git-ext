@@ -34,8 +34,9 @@ def list(ctx):
 def activity(ctx, id):
     prs = ctx.obj['prs']
     for activity in prs.pullrequests_activity(id):
-        click.echo(arrow.get(activity[1]).humanize()+'->')
-        click.echo("\t{} {}: {}".format(activity[2], activity[0], activity[3]))
+        click.echo(click.style(arrow.get(activity[1]).humanize(), fg='green'))
+        click.echo(click.style("{} {} this PR:".format(activity[2], activity[0]), fg='yellow'))
+        click.echo(activity[3])
 
 
 if __name__ == '__main__':

@@ -43,17 +43,17 @@ class PullRequests(object):
         activities = []
         for activity in resp['values']:
             if 'comment' in activity:
-                activities.append(('comment',
+                activities.append(('commented',
                                    activity['comment']['created_on'],
                                    activity['comment']['user']['username'],
                                    activity['comment']['content']['raw'],))
             elif 'update' in activity:
-                activities.append(('update',
+                activities.append(('updated',
                                    activity['update']['date'],
                                    activity['update']['author']['username'],
                                    '[' + activity['update']['state'] + ']' + activity['update']['title']))
             elif 'approval' in activity:
-                activities.append(('approve',
+                activities.append(('approved',
                                    activity['approval']['date'],
                                    activity['approval']['user']['username'],
                                    "Nice work!"))
