@@ -32,10 +32,11 @@ class PullRequests(object):
         return resp['values']
 
     def pullrequests_list(self):
-        return [(pr['id'], pr['title']) for pr in self.pullrequests]
+        return [(pr['id'], pr['title'], pr['author']['username'], pr['created_on']) for pr in self.pullrequests]
 
     def pullrequests_activity(self, pr_id):
         # TODO turn page use next
+        # TODO staticmethod
         resp = requests.get(urls.PULLREQUEST_ID_ACTIVITY.format(
             username=self.username,
             repo_slug=self.repo_slug,
@@ -43,7 +44,7 @@ class PullRequests(object):
         activities = []
         for activity in resp['values']:
             if 'comment' in activity:
-                activities.append(('commented',
+                activities.append(('commented on',
                                    activity['comment']['created_on'],
                                    activity['comment']['user']['username'],
                                    activity['comment']['content']['raw'],))

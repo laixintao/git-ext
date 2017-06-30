@@ -26,7 +26,9 @@ def pullrequests(ctx):
 def list(ctx):
     prs = ctx.obj['prs']
     for pr in prs.pullrequests_list():
-        click.echo(u"#{} {}".format(*pr))
+        click.echo(u"#{} {} by {}({updated_on})".format(updated_on=arrow.get(pr[3]).humanize(), *pr))
+    if not prs.pullrequests_list():
+        click.echo("No open PRs in this repo.")
 
 @pullrequests.command()
 @click.pass_context
