@@ -36,21 +36,19 @@ class PullRequests(object):
         post_data = {
             'title': title,
             'description': desc,
+            'close_source_branch': True,
+            'reviewers':[
+                {'username': username} for username in reviewers],
+            'destination': {
+                'branch': {'name': dest}},
             'source': {
                 'branch': {'name': source},
                 'repository': {'full_name': repo}},
-            'destination': {
-                'branch': {'name': dest}},
-            'reviewers':[
-                {'username': username} for username in reviewers],
-            'close_source_branch': True
         }
-        json_data = json.dumps(post_data)
-        logger.info(json_data)
-        resp = requests.post(urls.PULLREQUESTS.format(
-            username=self.username,
-            repo_slug=self.repo_slug), auth=user_auth,
-            data=post_data)
+        logger.info(post_data)
+        resp = requests.post(urls.PULLREQUESTS.format(username=self.username, repo_slug=self.repo_slug),
+                             auth=user_auth,
+                             json=post_data)
         logger.info(resp.status_code)
         logger.info(resp.json())
 
