@@ -11,6 +11,7 @@ import arrow
 
 from git_ext.utils import logging
 from git_ext.git import get_repo_slug, get_git_core_editor, get_dotgit_abs_path
+from git_ext.git import init_commit_editmsg_file, read_commit_editmsg_file
 from git_ext.bitbucket.pullrequests import PullRequests
 
 logger = logging.getLogger(__name__)
@@ -35,9 +36,9 @@ def list(ctx):
     if not pr_list:
         click.echo("No open PRs in this repo.")
 
-@pullrequests.command()
+@pullrequests.command(help="Show a pr's activity, display lastest 10 messages by default")
 @click.pass_context
-@click.option('--id', '-i', help="pullrequests' id")
+@click.argument('id')
 def activity(ctx, id):
     prs = ctx.obj['prs']
     for activity in prs.pullrequests_activity(id):
@@ -51,16 +52,16 @@ def activity(ctx, id):
 @click.argument('source_branch')
 @click.argument('destination_branch')
 def create(ctx, source_branch, destination_branch):
-    # TODO abort if no commit message
     logger.info("base branch: {}, head branch: {}".format(source_branch, destination_branch))
-    temp_submit_file = os.path.join(get_dotgit_abs_path(), '.git_ext.temp')
-    os.system(get_git_core_editor() + " " + temp_submit_file)
-    with open(temp_submit_file, 'r') as commit_file:
-        lines = commit_file.readlines()
-        title = lines[0]
-        desc = "".join(lines[1:])
-    os.remove(temp_submit_file)
+    pr_submit_file = init_commit_editmsg_file()
+    os.system(get_git_core_editor() + " " + pr_submit_file)
+    title, desc = read_commit_editmsg_file(pr_submit_file)
+    if not title:
+        click.echo("Creating pullrequests aborted!")
+        click.echo("Title is blank.")
+        return
     reviewers_raw = raw_input("Reviewers(start with @):")
+    # TODO reviewers group
     reviewers = "".join(reviewers_raw.split()).split('@')[1:]  # thy there is a space??
     prs = ctx.obj['prs']
     resp = prs.create(source_branch, destination_branch, reviewers, title, desc)

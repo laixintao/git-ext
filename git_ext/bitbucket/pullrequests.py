@@ -9,7 +9,7 @@ from git_ext.bitbucket.user import user_auth
 from git_ext.bitbucket import urls
 from git_ext.utils import logging
 
-PR_ECHO_STRING = "#{id} [{source}]->[{dest}] {title} by {author}({last_update})"
+PR_ECHO_STRING = "#{id} {title}[{source}->{dest}]  by {author}({last_update})"
 
 logger = logging.getLogger(__name__)
 
