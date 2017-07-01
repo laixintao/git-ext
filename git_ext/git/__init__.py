@@ -38,6 +38,7 @@ def get_git_core_editor():
     return editor
 
 def init_commit_editmsg_file():
+    # TODO write diff message to template file
     with open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r') as template:
         with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
             commit_edit_msg.write(template.read())

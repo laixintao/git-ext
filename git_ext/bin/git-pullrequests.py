@@ -59,6 +59,7 @@ def create(ctx, source_branch, destination_branch):
     if not title:
         click.echo("Creating pullrequests aborted!")
         click.echo("Title is blank.")
+        # TODO exit value
         return
     reviewers_raw = raw_input("Reviewers(start with @):")
     # TODO reviewers group
