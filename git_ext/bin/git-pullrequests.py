@@ -31,7 +31,7 @@ def list(ctx):
     pr_list = prs.pullrequests_list()
     logger.info(pr_list)
     for pr in pr_list:
-        click.echo(u"#{} {} by {}({updated_on})".format(updated_on=arrow.get(pr[3]).humanize(), *pr))
+        click.echo(pr)
     if not pr_list:
         click.echo("No open PRs in this repo.")
 
@@ -65,7 +65,10 @@ def create(ctx, source_branch, destination_branch):
     prs = ctx.obj['prs']
     resp = prs.create(source_branch, destination_branch, reviewers, title, desc)
     if resp.status_code == 201:
-        click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))
+        click.echo(click.style("201 Created!", fg='green'))
+        click.echo(PullRequests.output(resp.json()))
+        reviewers = [user['username'] for user in resp.json()['reviewers']]
+        click.echo(click.style("Reviewers: ", fg='yellow') + " ".join(reviewers))
     else:
         click.echo(click.style("ERROR!", fg='red'))
         click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))

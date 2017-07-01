@@ -4,9 +4,12 @@ from __future__ import unicode_literals
 
 import json
 import requests
+import arrow
 from git_ext.bitbucket.user import user_auth
 from git_ext.bitbucket import urls
 from git_ext.utils import logging
+
+PR_ECHO_STRING = "#{id} [{source}]->[{dest}] {title} by {author}({last_update})"
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +26,18 @@ class PullRequests(object):
             repo_slug=self.repo_slug)
         self.pullrequests = []
         self.is_requests_updated = False
+
+    @staticmethod
+    def output(value):
+        "accept a values in json format(return by bitbucket api)"
+        return PR_ECHO_STRING.format(
+            id=value['id'],
+            source=value['source']['branch']['name'],
+            dest=value['destination']['branch']['name'],
+            title=value['title'],
+            author=value['author']['username'],
+            last_update=arrow.get(value['updated_on']).humanize()
+        )
 
     def update_pullrequests(self):
         "Only open prs by default"
@@ -58,7 +73,7 @@ class PullRequests(object):
     def pullrequests_list(self):
         if not self.is_requests_updated:
             self.update_pullrequests()
-        return [(pr['id'], pr['title'], pr['author']['username'], pr['created_on']) for pr in self.pullrequests]
+        return [self.output(pr) for pr in self.pullrequests]
 
     def pullrequests_activity(self, pr_id):
         # TODO turn page use next
