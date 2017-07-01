@@ -1,1 +1,4 @@
 *.pyc
+build/*
+dist/*
+git_ext.egg-info/*
