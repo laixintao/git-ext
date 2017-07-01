@@ -4,6 +4,7 @@
 import os
 import re
 import commands
+import json
 
 import click
 import arrow
@@ -27,9 +28,11 @@ def pullrequests(ctx):
 @click.pass_context
 def list(ctx):
     prs = ctx.obj['prs']
-    for pr in prs.pullrequests_list():
+    pr_list = prs.pullrequests_list()
+    logger.info(pr_list)
+    for pr in pr_list:
         click.echo(u"#{} {} by {}({updated_on})".format(updated_on=arrow.get(pr[3]).humanize(), *pr))
-    if not prs.pullrequests_list():
+    if not pr_list:
         click.echo("No open PRs in this repo.")
 
 @pullrequests.command()
@@ -38,8 +41,9 @@ def list(ctx):
 def activity(ctx, id):
     prs = ctx.obj['prs']
     for activity in prs.pullrequests_activity(id):
-        click.echo(click.style(arrow.get(activity[1]).humanize(), fg='green'))
-        click.echo(click.style("{} {} this PR:".format(activity[2], activity[0]), fg='yellow'))
+        echo_time = click.style(arrow.get(activity[1]).humanize(), fg='green')
+        echo_action = click.style("{} {} this PR:".format(activity[2], activity[0]), fg='yellow')
+        click.echo(echo_time+ ' ' + echo_action)
         click.echo(activity[3])
 
 @pullrequests.command()
@@ -47,6 +51,7 @@ def activity(ctx, id):
 @click.argument('source_branch')
 @click.argument('destination_branch')
 def create(ctx, source_branch, destination_branch):
+    # TODO abort if no commit message
     logger.info("base branch: {}, head branch: {}".format(source_branch, destination_branch))
     temp_submit_file = os.path.join(get_dotgit_abs_path(), '.git_ext.temp')
     os.system(get_git_core_editor() + " " + temp_submit_file)
@@ -58,7 +63,13 @@ def create(ctx, source_branch, destination_branch):
     reviewers_raw = raw_input("Reviewers(start with @):")
     reviewers = "".join(reviewers_raw.split()).split('@')[1:]  # thy there is a space??
     prs = ctx.obj['prs']
-    prs.create(source_branch, destination_branch, reviewers, title, desc)
+    resp = prs.create(source_branch, destination_branch, reviewers, title, desc)
+    if resp.status_code == 201:
+        click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))
+    else:
+        click.echo(click.style("ERROR!", fg='red'))
+        click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))
+
 
 if __name__ == '__main__':
     pullrequests(obj={})

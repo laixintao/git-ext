@@ -27,11 +27,12 @@ class PullRequests(object):
     def update_pullrequests(self):
         "Only open prs by default"
         resp = requests.get(self.pullrequests_url, auth=user_auth).json()
-        logger.debug("Resp: {}".format(json.dumps(resp, indent=4, sort_keys=True)))
+        logger.debug("Resp: {}".format(json.dumps(resp, indent=2, sort_keys=True)))
         # TODO Turn page
         # TODO -a=all prs
         self.is_requests_updated = True
-        return resp['values']
+        self.pullrequests = resp['values']
+        return
 
     def create(self, source, dest, reviewers, title, desc):
         repo = "/".join([self.username, self.repo_slug])
@@ -52,7 +53,7 @@ class PullRequests(object):
                              auth=user_auth,
                              json=post_data)
         logger.info(resp.status_code)
-        logger.info(resp.json())
+        return resp
 
     def pullrequests_list(self):
         if not self.is_requests_updated:
@@ -62,6 +63,7 @@ class PullRequests(object):
     def pullrequests_activity(self, pr_id):
         # TODO turn page use next
         # TODO staticmethod
+        # TODO more pretty return values
         resp = requests.get(urls.PULLREQUEST_ID_ACTIVITY.format(
             username=self.username,
             repo_slug=self.repo_slug,
@@ -85,6 +87,7 @@ class PullRequests(object):
                                    "Nice work!"))
             else:
                 logger.info(activity)
+        activities.reverse()  # sorted by time
         return activities
 
 
