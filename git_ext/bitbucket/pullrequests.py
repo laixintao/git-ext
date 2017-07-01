@@ -29,6 +29,8 @@ class PullRequests(object):
         resp = requests.get(self.pullrequests_url, auth=user_auth).json()
         logger.debug("Resp: {}".format(json.dumps(resp, indent=4, sort_keys=True)))
         # TODO Turn page
+        # TODO -a=all prs
+        self.is_requests_updated = True
         return resp['values']
 
     def create(self, source, dest, reviewers, title, desc):
