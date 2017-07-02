@@ -5,7 +5,7 @@ import sys
 from codecs import open
 from setuptools import setup, find_packages
 
-VERSION = 0.1
+VERSION = '0.2.1'
 DESCRIPTION = 'A git extension that allows you submit pullrequests from command line.'
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -31,9 +31,10 @@ setup(
     zip_safe=False,
     classifiers=(
         'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',

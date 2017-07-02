@@ -6,18 +6,22 @@
 
 A git extension that allows you submit pullrequests from command line.
 
+## install
+
+    pip install git-ext
+
 ## usage
 
-    $ git pullrequests create test_b master
+    $ git pullrequest create test_b master
     Reviewers(start with @):
     201 Created!
     #2 This is your commit title.[test_b->master]  by boson_laixintao(just now)
     Reviewers:
 
-    $ git pullrequests list
+    $ git pullrequest list
     #2 This is your commit title.[test_b->master]  by boson_laixintao(just now)
 
-    $ git pullrequests
+    $ git pullrequest
     Usage: git-pullrequests [OPTIONS] COMMAND [ARGS]...
 
     Options:
