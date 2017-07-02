@@ -25,7 +25,6 @@ setup(
     author_email='laixintao1995@163.com',
     url='https://github.com/laixintao/git-ext',
     packages=find_packages(),
-    package_dir={'git_ext': 'git_ext'},
     include_package_data=True,
     install_requires=requires,
     license='GNU',

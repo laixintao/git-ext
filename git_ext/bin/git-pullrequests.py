@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # pylint: disable=invalid-name, no-value-for-parameter, unexpected-keyword-arg
+from __future__ import absolute_import
 
 import os
 import re
