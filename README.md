@@ -2,7 +2,7 @@
 
 [![Pypi](https://img.shields.io/badge/pypi-v0.1-green.svg)](https://codecov.io/gh/laixintao/git-ex://pypi.python.org/pypi/git-ext)
 [![Codecov](https://img.shields.io/codecov/c/github/laixintao/git-ext.svg)](https://codecov.io/gh/laixintao/git-ext)
-![](https://travis-ci.org/laixintao/git-ext.svg?branch=master)
+[![Build](https://travis-ci.org/laixintao/git-ext.svg?branch=master)](https://travis-ci.org/laixintao/git-ext)
 
 A git extension that allows you submit pullrequests from command line.
 
