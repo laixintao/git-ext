@@ -48,7 +48,7 @@ setup(
     # TODO use install to generic yml file cmdclass={'git-pullrequests': PyTest},
     entry_points={
         'console_scripts': [
-            'git-pullrequest = git_ext.bin.pullrequests',
+            'git-pullrequest = git_ext.bin.pullrequest:main',
         ],
         'gui_scripts': []
     }

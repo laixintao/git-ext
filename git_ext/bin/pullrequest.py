@@ -77,6 +77,8 @@ def create(ctx, source_branch, destination_branch):
         click.echo(click.style("ERROR!", fg='red'))
         click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))
 
+def main():
+    pullrequests(obj={})
 
 if __name__ == '__main__':
-    pullrequests(obj={})
+    main()
