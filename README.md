@@ -12,6 +12,12 @@ Current support bitbucket only, add github and gitlab in the future.
 
     pip install git-ext
 
+### Optional
+
+You can add a git alias if you are lazy like me :)
+
+    git config --global alias.pr pullrequest  
+
 ## develop
     
     export GITEXT=debug
