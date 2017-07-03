@@ -6,9 +6,17 @@
 
 A git extension that allows you submit pullrequests from command line.
 
+Current support bitbucket only, add github and gitlab in the future.
+
 ## install
 
     pip install git-ext
+
+## develop
+    
+    export GITEXT=debug
+
+So that you can see the logging output.
 
 ## usage
 
