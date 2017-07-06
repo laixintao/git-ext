@@ -42,11 +42,12 @@ def list(ctx):
 @click.pass_context
 @click.argument('id')
 def activity(ctx, id):
+    # TODO move colors to color-theme config file
     prs = ctx.obj['prs']
     for activity in prs.pullrequests_activity(id):
         echo_user = click.style(activity[2], fg='green')
         echo_action_time = click.style(" {} this PR {}:".format(activity[0],
-                                                                arrow.get(activity[2]).humanize()), fg='yellow')
+                                                                arrow.get(activity[1]).humanize()), fg='yellow')
         click.echo(echo_user+ ' ' + echo_action_time)
         click.echo(activity[3])
 

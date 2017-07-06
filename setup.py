@@ -33,6 +33,7 @@ setup(
     entry_points={
         'console_scripts': [
             'git-pullrequest = git_ext.bin.pullrequest:main',
+            'init-git-ext = git_ext.bin.init_git_ext:main',
         ],
         'gui_scripts': []
     }
