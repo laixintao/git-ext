@@ -44,9 +44,10 @@ def list(ctx):
 def activity(ctx, id):
     prs = ctx.obj['prs']
     for activity in prs.pullrequests_activity(id):
-        echo_time = click.style(arrow.get(activity[1]).humanize(), fg='green')
-        echo_action = click.style("{} {} this PR:".format(activity[2], activity[0]), fg='yellow')
-        click.echo(echo_time+ ' ' + echo_action)
+        echo_user = click.style(activity[2], fg='green')
+        echo_action_time = click.style(" {} this PR {}:".format(activity[0],
+                                                                arrow.get(activity[2]).humanize()), fg='yellow')
+        click.echo(echo_user+ ' ' + echo_action_time)
         click.echo(activity[3])
 
 @pullrequests.command()
