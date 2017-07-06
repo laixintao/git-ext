@@ -10,7 +10,13 @@ Current support bitbucket only, add github and gitlab in the future.
 
 ## install
 
+Use pip to install.
+
     pip install git-ext
+
+Then run init-git-ext command to write your bitbucket account infomation to ~/.git_ext.yml(Pullrequests need account info with HTTP BASIC AUTH.
+
+    init-git-ext
 
 ### Optional
 
@@ -45,3 +51,7 @@ So that you can see the logging output.
       activity  Show a pr's activity, display lastest 10...
       create
       list
+
+## Licenses
+
+GPLv3
