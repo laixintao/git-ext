@@ -5,7 +5,7 @@ import sys
 from codecs import open
 from setuptools import setup, find_packages
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 DESCRIPTION = 'A git extension that allows you submit pullrequests from command line.'
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -33,6 +33,7 @@ setup(
     entry_points={
         'console_scripts': [
             'git-pullrequest = git_ext.bin.pullrequest:main',
+            'init-git-ext = git_ext.bin.init_git_ext:main',
         ],
         'gui_scripts': []
     }

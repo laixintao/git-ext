@@ -42,12 +42,15 @@ class PullRequests(object):
 
     def update_pullrequests(self):
         "Only open prs by default"
-        resp = requests.get(self.pullrequests_url, auth=user_auth).json()
-        logger.debug("Resp: {}".format(json.dumps(resp, indent=2, sort_keys=True)))
+        resp = requests.get(self.pullrequests_url, auth=user_auth)
+        if resp.status_code != 200:
+            raise Exception("ERROR! status_code={}, response={}".format(resp.status_code, resp.content))
+        json_content = resp.json()
+        logger.debug("Resp: {}".format(json.dumps(json_content, indent=2, sort_keys=True)))
         # TODO Turn page
         # TODO -a=all prs
         self.is_requests_updated = True
-        self.pullrequests = resp['values']
+        self.pullrequests = json_content['values']
         return
 
     def create(self, source, dest, reviewers, title, desc):

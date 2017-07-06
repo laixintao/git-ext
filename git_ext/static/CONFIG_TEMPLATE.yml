@@ -1,0 +1,9 @@
+---
+bitbucket:
+        email: glenn.lai@bosondata.com.cn
+        password: Gm9Knjks6
+
+git_ext:
+        logging:
+                level: DEBUG
+                format: "%(name)s - %(message)s"
