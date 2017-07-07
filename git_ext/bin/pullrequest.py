@@ -11,7 +11,7 @@ import json
 import click
 import arrow
 
-from git_ext.utils import logging
+from git_ext.utils import logging, get_reviewers_group, check_reviewers_group
 from git_ext.git import get_repo_slug, get_git_core_editor, get_dotgit_abs_path
 from git_ext.git import init_commit_editmsg_file, read_commit_editmsg_file
 from git_ext.bitbucket.pullrequests import PullRequests
@@ -65,11 +65,14 @@ def create(ctx, source_branch, destination_branch):
         click.echo("Title is blank.")
         # TODO exit value
         return
+    click.echo("Custom groups:")
+    reviewers_group = get_reviewers_group()
+    for group in reviewers_group:
+        click.echo("@{} = {}".format(group, reviewers_group[group]))
     reviewers_raw = raw_input("Reviewers(start with @):")
-    # TODO reviewers group
-    reviewers = "".join(reviewers_raw.split()).split('@')[1:]  # thy there is a space??
+    final_reviewers = check_reviewers_group(reviewers_raw)
     prs = ctx.obj['prs']
-    resp = prs.create(source_branch, destination_branch, reviewers, title, desc)
+    resp = prs.create(source_branch, destination_branch, final_reviewers, title, desc)
     if resp.status_code == 201:
         click.echo(click.style("201 Created!", fg='green'))
         click.echo(PullRequests.output(resp.json()))
