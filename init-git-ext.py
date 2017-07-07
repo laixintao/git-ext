@@ -1,1 +1,0 @@
-git_ext/bin/init-git-ext.py
