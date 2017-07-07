@@ -9,5 +9,4 @@ def read_file(path):
     return file_content
 
 def open_file(path):
-    print "open!"
     return open(os.path.abspath("tests/fixtures/"+path), 'r')
