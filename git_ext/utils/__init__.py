@@ -34,7 +34,7 @@ def config_log():
 def get_reviewers_group():
     "Return group defined in ~/.git_ext.yml, for quick input reviewers."
     config = read_config()
-    return config['reviewers_group']
+    return config.get('reviewers_group')
 
 def check_reviewers_group(raw_reviewers):
     reviewers_group = get_reviewers_group()
@@ -49,3 +49,4 @@ def check_reviewers_group(raw_reviewers):
     return final_reviewers
 
 config_log()
+read_config()

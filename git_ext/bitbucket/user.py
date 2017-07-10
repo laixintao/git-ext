@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from requests.auth import HTTPBasicAuth
-from git_ext import config
+from git_ext.utils import config
 from git_ext.utils import logging
 
 logger = logging.getLogger(__name__)
