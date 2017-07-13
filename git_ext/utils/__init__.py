@@ -4,11 +4,11 @@ from __future__ import absolute_import
 
 import logging
 import os
-import commands
 import yaml
 
 config = None
 logger = logging.getLogger(__name__)
+
 
 def read_config():
     global config
@@ -19,10 +19,12 @@ def read_config():
         config = yaml.load(config_file)
     return config
 
+
 def get_gitext_config():
     config_file = read_config()
     gitext_config = config_file.get('git_ext')
     return gitext_config
+
 
 def config_log():
     if os.getenv('GITEXT') == 'debug':
@@ -31,14 +33,17 @@ def config_log():
         level = logging.ERROR
     logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
 
+
 def get_reviewers_group():
     "Return group defined in ~/.git_ext.yml, for quick input reviewers."
     config = read_config()
     return config.get('reviewers_group')
 
+
 def check_reviewers_group(raw_reviewers):
     reviewers_group = get_reviewers_group()
-    splited_reviewers = "".join(raw_reviewers.split()).split('@')[1:]  # why there is a space??
+    logger.info(reviewers_group)
+    splited_reviewers = [reviewer for reviewer in "".join(raw_reviewers.split()).split('@') if reviewer]
     final_reviewers = []
     logger.info("reviewers_group: {}".format(reviewers_group))
     for reviewer in splited_reviewers:
@@ -47,6 +52,7 @@ def check_reviewers_group(raw_reviewers):
         else:
             final_reviewers.append(reviewer)
     return final_reviewers
+
 
 config_log()
 read_config()

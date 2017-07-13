@@ -68,7 +68,7 @@ def create(ctx, source_branch, destination_branch):
     click.echo("Custom groups:")
     reviewers_group = get_reviewers_group()
     for group in reviewers_group:
-        click.echo("@{} = {}".format(group, reviewers_group[group]))
+        click.echo(group)
     reviewers_raw = raw_input("Reviewers(start with @):")
     final_reviewers = check_reviewers_group(reviewers_raw)
     prs = ctx.obj['prs']
