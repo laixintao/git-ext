@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import os
 import re
 import commands
-from git_ext.utils import logging, read_config
+from git_ext.utils import logging, read_config, make_start_with_hashtag
 
 
 DEFAULT_PR_TEMPLATE_PATH = '../static/PR_SUBMIT_TEMPLATE'
@@ -39,18 +39,32 @@ def get_git_core_editor():
     logger.debug("Core editor: {}".format(editor))
     return editor
 
-def init_commit_editmsg_file():
-    # TODO write diff message to template file
+def init_commit_editmsg_file(source_branch, destination_branch):
+    # TODO git commiting colorscheme
+    # see also: https://github.com/vim/vim/blob/master/runtime/syntax/gitcommit.vim
     with open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r') as template:
         with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
-            commit_edit_msg.write(template.read())
+            template_content = template.read()
+            commit_log = commands.getoutput("git log --branches --not {} --pretty=format:' %h: %s'".format(destination_branch))
+            diff_stat = commands.getoutput("git diff {} --stat".format(destination_branch))
+            template_content = template_content.format(source_branch=source_branch,
+                destination_branch=destination_branch,
+                COMMIT_LOG=make_start_with_hashtag(commit_log),
+                DIFF_STAT=make_start_with_hashtag(diff_stat))
+            commit_edit_msg.write(template_content)
     return get_commit_editmsg_abs_path()
 
 def read_commit_editmsg_file(pr_submit_file):
     with open(pr_submit_file, 'r') as commit_file:
         lines = commit_file.readlines()
-        if not lines:
-            return '', ''
+        lines = [line for line in lines if not line.startswith('#')]
+        logger.info(lines)
+        # if all lines are empty, abort pr
+        for line in lines:
+            if line.strip():
+                break
+        else:
+            return "", ""
         title = lines[0]
         desc = "".join(lines[1:])
     return title, desc

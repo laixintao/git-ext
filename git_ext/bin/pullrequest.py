@@ -57,14 +57,12 @@ def activity(ctx, id):
 @click.argument('destination_branch')
 def create(ctx, source_branch, destination_branch):
     logger.info("base branch: {}, head branch: {}".format(source_branch, destination_branch))
-    pr_submit_file = init_commit_editmsg_file()
+    pr_submit_file = init_commit_editmsg_file(source_branch, destination_branch)
     os.system(get_git_core_editor() + " " + pr_submit_file)
     title, desc = read_commit_editmsg_file(pr_submit_file)
     if not title:
-        click.echo("Creating pullrequests aborted!")
         click.echo("Title is blank.")
-        # TODO exit value
-        return
+        raise click.Abort
     click.echo("Custom groups:")
     reviewers_group = get_reviewers_group()
     for group in reviewers_group:

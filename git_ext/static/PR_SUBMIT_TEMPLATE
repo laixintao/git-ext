@@ -1,1 +1,12 @@
-this is template
+
+
+
+# Line starting with "#" will be ignored. (Just like git commit)
+# Empty pr messages will abort the pr.
+# Changes to be submitted:
+# {source_branch} -> {destination_branch}
+#
+# Commits log:
+{COMMIT_LOG}
+# Diff stat:
+{DIFF_STAT}

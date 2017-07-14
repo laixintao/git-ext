@@ -54,5 +54,17 @@ def check_reviewers_group(raw_reviewers):
     return final_reviewers
 
 
+def make_start_with_hashtag(raw_content):
+    # FIXME not test in windows
+    lines = raw_content.split(os.linesep)
+    result = ""
+    logger.info("lines")
+    for line in lines[:-1]:
+        logger.info(line)
+        if not line.strip(): continue
+        result = result + '#' + line + os.linesep
+    result = result + '#' + lines[-1]  # no linesep in last line
+    return result
+
 config_log()
 read_config()
