@@ -108,8 +108,3 @@ class PullRequests(object):
                 logger.info(activity)
         activities.reverse()  # sorted by time
         return activities
-
-
-if __name__ == '__main__':
-    pr = PullRequests('deepanalyzer', 'yorg')
-    logger.info(pr.pullrequests_list())
