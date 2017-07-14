@@ -1,3 +1,2 @@
 include README.md requirements.txt
-recursive-include git_ext/static
-recursive-include tests *.py
+recursive-include git_ext/static *
