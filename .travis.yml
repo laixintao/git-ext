@@ -8,6 +8,7 @@ install:
         - pip install codecov
         - pip install pytest
         - pip install pytest-cov
+        - python setup.py install
 # command to run tests
 script: 
         - pwd
