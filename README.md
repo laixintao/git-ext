@@ -1,6 +1,6 @@
 # git-ext
 
-[![Pypi](https://img.shields.io/badge/pypi-v0.1-green.svg)](https://codecov.io/gh/laixintao/git-ex://pypi.python.org/pypi/git-ext)
+[![Pypi](https://img.shields.io/badge/pypi-v0.1-green.svg)](https://pypi.python.org/pypi/git-ext)
 [![Codecov](https://img.shields.io/codecov/c/github/laixintao/git-ext.svg)](https://codecov.io/gh/laixintao/git-ext)
 [![Build](https://travis-ci.org/laixintao/git-ext.svg?branch=master)](https://travis-ci.org/laixintao/git-ext)
 
