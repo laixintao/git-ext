@@ -5,12 +5,10 @@ python:
 install:
         - cp ./git_ext/static/CONFIG_TEMPLATE.yml ~/.git_ext.yml
         - pip install -r requirements.txt
-        - pip install codecov
-        - pip install pytest
         - pip install pytest-cov
         - python setup.py install
 # command to run tests
 script:
-        - py.test --cov=./
+        - py.test --cov=git_ext
 after_success:
         - codecov
