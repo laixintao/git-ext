@@ -71,7 +71,7 @@ def create(ctx, source_branch, destination_branch):
         for group in reviewers_group:
             click.echo(group)
     else:
-        click.echo("You can custom reviewers group in ~/.git_ext.yml")
+        click.echo("No reviewers group found, you can custom reviewers group in ~/.git_ext.yml")
     reviewers_raw = raw_input("Reviewers(start with @):")
     final_reviewers = check_reviewers_group(reviewers_raw)
     prs = ctx.obj['prs']
