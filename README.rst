@@ -1,6 +1,6 @@
-====
+==========
 git-ext
-====
+==========
 
 .. image :: https://img.shields.io/badge/pypi-v0.1-green.svg
     :target: https://pypi.python.org/pypi/git-ext
@@ -15,7 +15,7 @@ A git extension that allows you submit pullrequests from command line.
 Current support bitbucket only, add github and gitlab in the future.
 
 install
-----
+----------
 
 Use pip to install.::
 
@@ -26,7 +26,7 @@ Then run init-git-ext command to write your bitbucket account infomation to ~/.g
     init-git-ext
 
 Optional
-----
+----------
 
 You can add a git alias if you are lazy like me :)::
 
@@ -34,7 +34,7 @@ You can add a git alias if you are lazy like me :)::
 
 
 usage
-----
+----------
 ::
 
     $ git pullrequest create test_b master
@@ -58,7 +58,7 @@ usage
       list
 
 Develop
-----
+----------
 
 Export a enviroment to see the logs::
     
@@ -66,6 +66,6 @@ Export a enviroment to see the logs::
 
 
 Licenses
-----
+----------
 
 GPLv3
