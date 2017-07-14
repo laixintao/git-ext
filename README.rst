@@ -1,36 +1,41 @@
-# git-ext
+====
+git-ext
+====
 
-[![Pypi](https://img.shields.io/badge/pypi-v0.1-green.svg)](https://pypi.python.org/pypi/git-ext)
-[![Codecov](https://img.shields.io/codecov/c/github/laixintao/git-ext.svg)](https://codecov.io/gh/laixintao/git-ext)
-[![Build](https://travis-ci.org/laixintao/git-ext.svg?branch=master)](https://travis-ci.org/laixintao/git-ext)
+.. image :: https://img.shields.io/badge/pypi-v0.1-green.svg
+    :target: https://pypi.python.org/pypi/git-ext
+.. image :: https://img.shields.io/codecov/c/github/laixintao/git-ext.svg
+    :target: https://codecov.io/gh/laixintao/git-ext
+.. image :: https://travis-ci.org/laixintao/git-ext.svg?branch=master
+    :target: https://travis-ci.org/laixintao/git-ext
+
 
 A git extension that allows you submit pullrequests from command line.
 
 Current support bitbucket only, add github and gitlab in the future.
 
-## install
+install
+----
 
-Use pip to install.
+Use pip to install.::
 
     pip install git-ext
 
-Then run init-git-ext command to write your bitbucket account infomation to ~/.git_ext.yml(Pullrequests need account info with HTTP BASIC AUTH.
+Then run init-git-ext command to write your bitbucket account infomation to ~/.git_ext.yml(Pullrequests need account info with HTTP BASIC AUTH.::
 
     init-git-ext
 
-### Optional
+Optional
+----
 
-You can add a git alias if you are lazy like me :)
+You can add a git alias if you are lazy like me :)::
 
     git config --global alias.pr pullrequest  
 
-## develop
-    
-    export GITEXT=debug
 
-So that you can see the logging output.
-
-## usage
+usage
+----
+::
 
     $ git pullrequest create test_b master
     Reviewers(start with @):
@@ -52,6 +57,15 @@ So that you can see the logging output.
       create
       list
 
-## Licenses
+Develop
+----
+
+Export a enviroment to see the logs::
+    
+    export GITEXT=debug
+
+
+Licenses
+----
 
 GPLv3
