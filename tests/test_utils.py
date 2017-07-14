@@ -3,7 +3,6 @@
 
 import unittest
 import mock
-from utils import open_file
 
 
 class GitExtUtilsTest(unittest.TestCase):

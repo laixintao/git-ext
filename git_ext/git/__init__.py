@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Staff related to git repo, like git commit file, git path, etc.
+"""
+
 from __future__ import absolute_import
 
 import os
