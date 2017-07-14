@@ -10,4 +10,5 @@ install:
 script:
         - py.test --cov=git_ext
 after_success:
+        - pip install codecov
         - codecov
