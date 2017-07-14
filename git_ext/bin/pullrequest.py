@@ -65,10 +65,13 @@ def create(ctx, source_branch, destination_branch):
         raise click.Abort
     # backup commit file
     backup_commit_file()
-    click.echo("Custom groups:")
     reviewers_group = get_reviewers_group()
-    for group in reviewers_group:
-        click.echo(group)
+    if reviewers_group:
+        click.echo("Custom groups:")
+        for group in reviewers_group:
+            click.echo(group)
+    else:
+        click.echo("You can custom reviewers group in ~/.git_ext.yml")
     reviewers_raw = raw_input("Reviewers(start with @):")
     final_reviewers = check_reviewers_group(reviewers_raw)
     prs = ctx.obj['prs']
