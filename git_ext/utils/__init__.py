@@ -6,32 +6,14 @@ import logging
 import os
 import yaml
 
-config = None
 logger = logging.getLogger(__name__)
 
 
-def read_config():
-    global config
+def get_config():
     config_file_path = os.path.join(os.path.expanduser('~'), '.git_ext.yml')
-    if config:
-        return config
     with open(config_file_path) as config_file:
         config = yaml.load(config_file)
     return config
-
-
-def get_gitext_config():
-    config_file = read_config()
-    gitext_config = config_file.get('git_ext')
-    return gitext_config
-
-
-def config_log():
-    if os.getenv('GITEXT') == 'debug':
-        level = logging.DEBUG
-    else:
-        level = logging.ERROR
-    logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
 
 
 def get_reviewers_group():
@@ -53,6 +35,13 @@ def check_reviewers_group(raw_reviewers):
             final_reviewers.append(reviewer)
     return final_reviewers
 
+def config_log():
+    if os.getenv('GITEXT') == 'debug':
+        level = logging.DEBUG
+    else:
+        level = logging.ERROR
+        logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
+
 
 def make_start_with_hashtag(raw_content):
     # FIXME not test in windows
@@ -67,4 +56,4 @@ def make_start_with_hashtag(raw_content):
     return result
 
 config_log()
-read_config()
+config = get_config()
