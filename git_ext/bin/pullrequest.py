@@ -12,8 +12,8 @@ import click
 import arrow
 
 from git_ext.utils import logging, get_reviewers_group, check_reviewers_group
-from git_ext.git import get_repo_slug, get_git_core_editor, get_dotgit_abs_path
-from git_ext.git import init_commit_editmsg_file, read_commit_editmsg_file
+from git_ext.git import get_repo_slug, get_git_core_editor, get_dotgit_abs_path, backup_commit_file
+from git_ext.git import init_commit_editmsg_file, read_commit_editmsg_file, get_commit_editmsg_bak_abs_path
 from git_ext.bitbucket.pullrequests import PullRequests
 
 logger = logging.getLogger(__name__)
@@ -63,6 +63,8 @@ def create(ctx, source_branch, destination_branch):
     if not title:
         click.echo("Title is blank.")
         raise click.Abort
+    # backup commit file
+    backup_commit_file()
     click.echo("Custom groups:")
     reviewers_group = get_reviewers_group()
     for group in reviewers_group:
@@ -72,6 +74,8 @@ def create(ctx, source_branch, destination_branch):
     prs = ctx.obj['prs']
     resp = prs.create(source_branch, destination_branch, final_reviewers, title, desc)
     if resp.status_code == 201:
+        # delete backup commit file
+        os.remove(get_commit_editmsg_bak_abs_path())
         click.echo(click.style("201 Created!", fg='green'))
         click.echo(PullRequests.output(resp.json()))
         reviewers = [user['username'] for user in resp.json()['reviewers']]
