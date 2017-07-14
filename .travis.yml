@@ -7,9 +7,10 @@ install:
         - pip install -r requirements.txt
         - pip install codecov
         - pip install pytest
-        - pip install coverage
+        - pip install pytest-cov
 # command to run tests
 script: 
         - python -m pytest tests/
+        - py.test --cov=./
 after_success:
         - codecov
