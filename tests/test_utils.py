@@ -35,7 +35,8 @@ class GitExtUtilsTest(unittest.TestCase):
         assert final_reviewers == ['youranl', 'dushujun', 'Jianhao', 'mrluanma']
 
     def test_get_config_success(self):
-        from git_ext.utils import config
+        from git_ext.utils import get_config
+        config = get_config()
         assert config['bitbucket']['email']
         assert config['bitbucket']['password']
 
