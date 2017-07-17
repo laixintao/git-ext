@@ -10,7 +10,7 @@ import os
 import re
 import commands
 import shutil
-from git_ext.utils import logging, read_config, make_start_with_hashtag
+from git_ext.utils import logging, make_start_with_hashtag
 
 DEFAULT_PR_TEMPLATE_PATH = '../static/PR_SUBMIT_TEMPLATE'
 SCRIPT_PATH = os.path.split(os.path.realpath(__file__))[0]

@@ -18,7 +18,7 @@ def get_config():
 
 def get_reviewers_group():
     "Return group defined in ~/.git_ext.yml, for quick input reviewers."
-    config = read_config()
+    config = get_config()
     return config.get('reviewers_group')
 
 
@@ -56,4 +56,3 @@ def make_start_with_hashtag(raw_content):
     return result
 
 config_log()
-config = get_config()
