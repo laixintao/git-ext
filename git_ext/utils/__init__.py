@@ -42,7 +42,6 @@ def config_log():
         level = logging.ERROR
         logging.basicConfig(level=level, format='%(name)s\t - %(message)s')
 
-
 def make_start_with_hashtag(raw_content):
     # FIXME not test in windows
     lines = raw_content.split(os.linesep)
