@@ -29,7 +29,7 @@ def pullrequests(ctx):
 @click.pass_context
 def list(ctx):
     prs = ctx.obj['prs']
-    pr_list = prs.pullrequests_list()
+    pr_list = prs.list_all()
     logger.info(pr_list)
     for pr in pr_list:
         click.echo(pr)
