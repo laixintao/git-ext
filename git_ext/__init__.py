@@ -104,9 +104,28 @@ class PullRequest(object):
         "handle resp, return activity list"
         pass
 
-    def activity(self):
+    @abstractmethod
+    def to_post_data(self):
+        "return for request posting"
+        pass
+
+    def activities(self):
         # TODO turn page use next
         # TODO staticmethod
         # TODO more pretty return values
         resp = requests.get(self._get_request_activity_url(), auth=self.user.auth).json()
         return self._handle_activity_response(resp)
+
+    @abstractmethod
+    def submit(self):
+        "Submit this pr to remote."
+        pass
+
+
+class Remote(object):
+    "Define a remote's behavior, like submit a pr, or check activities."
+    def list_all_prs(self):
+        pass
+
+    def submit_new_pr(self, pr):
+        pass
