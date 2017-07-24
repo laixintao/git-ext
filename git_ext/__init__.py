@@ -2,24 +2,29 @@
 
 from __future__ import unicode_literals, absolute_import
 
-import json
-import requests
+from requests.auth import  HTTPBasicAuth
 import arrow
+import click
 from abc import ABCMeta, abstractmethod
-from git_ext.bitbucket.user import user_auth
-from git_ext.bitbucket import urls
 from git_ext.utils import logging
+from git_ext.git import get_repo_slug
 
-PR_ECHO_STRING = "#{id} {title}[{source}->{dest}]  by {author}({last_update})"
+PR_DISPLAY_FORMAT = "#{_id} {title}[{source_branch}->{dest_branch}]  by {author}"
 
 logger = logging.getLogger(__name__)
 
+
+class User(object):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.auth = HTTPBasicAuth(self.username, self.password)
 
 class Activity(object):
     "Pull request's activity, like comment, approval etc"
 
     COMMENT_TYPE = 'comment'
-    APPROVAL_TYPE = 'approval'
+    APPROVAL_TYPE = 'approve'
     UPDATE_TYPE = 'update'
 
     def __init__(self, username, content, type, time):
@@ -31,101 +36,62 @@ class Activity(object):
     def __str__(self):
         pass
 
+    def to_echo(self):
+        echo_user = click.style(self.username, fg='green')
+        echo_action_time = click.style(" {} this PR {}:".format(self.type,
+                                                                arrow.get(self.time).humanize(), fg='yellow'))
+        display = echo_user + ' ' + echo_action_time + '\n' + self.content
+        return display
+
 
 class PullRequest(object):
-    __metaclass__ = ABCMeta
 
-    def __init__(self, user, repo_username, repo_name, *args, **kwargs):
-        self.user = user
-        self.repo_name = repo_name
-        self.repo_username = repo_username
-        self.__dict__.update(kwargs)
-
-    @abstractmethod
-    def _get_request_post_url(self):
-        pass
+    def __init__(self, _id, source_branch, dest_branch, author, reviewers, title, description):
+        """
+        :param reviewers: list consist of str
+        others: string
+        """
+        self._id = _id
+        self.source_branch = source_branch
+        self.dest_branch = dest_branch
+        self.author = author
+        self.reviewers = reviewers
+        self.title = title
+        self.description = description
 
     def __str__(self):
-        return PR_ECHO_STRING.format(self.__dict__)
-
-    def create(self, source, dest, reviewers, title, desc):
-        "create a new pull request."
-        repo = "/".join([self.user.username, self.repo_name])
-        post_data = {
-            'title': title,
-            'description': desc,
-            'close_source_branch': True,
-            'reviewers': [
-                {'username': username} for username in reviewers],
-            'destination': {
-                'branch': {'name': dest}},
-            'source': {
-                'branch': {'name': source},
-                'repository': {'full_name': repo}},
-        }
-        logger.info(post_data)
-        resp = requests.post(self._get_request_post_url(),
-                             auth=self.user.auth,
-                             json=post_data)
-        logger.info(resp.status_code)
-        return resp
-
-    def list_all(self):
-        """Get all open pullrequests.
-        TODO Turn page
-        TODO -a=all prs
-        :return pullrequest_list: PullReuqest lists"""
-        resp = requests.get(self.pullrequests_url, auth=user_auth)
-        if resp.status_code != 200:
-            raise Exception("ERROR! status_code={}, response={}".format(resp.status_code, resp.content))
-        json_content = resp.json()
-        logger.debug("Resp: {}".format(json.dumps(json_content, indent=2, sort_keys=True)))
-        pullrequest_list = []
-        pullrequest_values = json_content['values']
-        for value in pullrequest_values:
-            pullrequest_list.append(
-                PullRequest(self.user,
-                            self.repo_name,
-                            id=value['id'],
-                            source=value['source']['branch']['name'],
-                            dest=value['destination']['branch']['name'],
-                            title=value['title'],
-                            author=value['author']['username'],
-                            last_update=arrow.get(value['updated_on']).humanize())
-            )
-        return pullrequest_list
-
-    @abstractmethod
-    def _get_request_activity_url(self):
-        pass
-
-    @abstractmethod
-    def _handle_activity_response(self, resp):
-        "handle resp, return activity list"
-        pass
-
-    @abstractmethod
-    def to_post_data(self):
-        "return for request posting"
-        pass
-
-    def activities(self):
-        # TODO turn page use next
-        # TODO staticmethod
-        # TODO more pretty return values
-        resp = requests.get(self._get_request_activity_url(), auth=self.user.auth).json()
-        return self._handle_activity_response(resp)
-
-    @abstractmethod
-    def submit(self):
-        "Submit this pr to remote."
-        pass
+        return PR_DISPLAY_FORMAT.format(**self.__dict__)
 
 
 class Remote(object):
     "Define a remote's behavior, like submit a pr, or check activities."
-    def list_all_prs(self):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self, user):
+        """
+        :param user: User
+        :param repo_username, repo_name: for url formatting, like laixintao/git-ext.
+        """
+        self.user = user
+        self.repo_username, self.repo_name = get_repo_slug()
+
+    @abstractmethod
+    def get_all_pullrequests(self):
+        """Get all open pullrequests.
+        TODO Turn page
+        TODO -a=all prs
+        :return pullrequest_list: PullReuqest lists"""
         pass
 
+    @abstractmethod
     def submit_new_pr(self, pr):
+        pass
+
+    @abstractmethod
+    def get_activities(self, pr_id):
+        "get activities for a spcific pull request"
+        # TODO turn page use next
+        # TODO staticmethod
+        # TODO more pretty return values
         pass

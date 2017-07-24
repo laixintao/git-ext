@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import requests
-
+from __future__ import unicode_literals
 
 class Gist(object):
     post_url = 'https://api.github.com/gists'
