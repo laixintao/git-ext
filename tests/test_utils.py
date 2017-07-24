@@ -1,8 +1,11 @@
 # -*- coding: utf-8
 # pylint: disable=no-self-use, invalid-name
 
+from __future__ import unicode_literals
+
 import unittest
 import mock
+import os
 
 
 class GitExtUtilsTest(unittest.TestCase):
@@ -40,17 +43,22 @@ class GitExtUtilsTest(unittest.TestCase):
         assert config['bitbucket']['email']
         assert config['bitbucket']['password']
 
+    @mock.patch.dict(os.environ, {'GITEXT':''})
     def test_config_log_no_debug(self):
-        import os
-        os.environ['GITEXT'] = ""
         from git_ext.utils import logging, config_log
         config_log()
         assert logging.getLogger().getEffectiveLevel() == logging.ERROR
-        os.environ['GITEXT'] = ""
 
-    def test_config_log_debug(self):
-        import os
-        os.environ['GITEXT'] = 'debug'
-        from git_ext.utils import logging
-        assert logging.getLogger().getEffectiveLevel() == logging.ERROR
-        os.environ['GITEXT'] = ""
+    @mock.patch.dict(os.environ, {'GITEXT':'debug'})
+    @mock.patch('logging.basicConfig')
+    def test_config_log_debug(self, mock_logging):
+        from git_ext.utils import config_log
+        import logging
+        config_log()
+        mock_logging.assert_called_with(level=logging.DEBUG, format='%(name)s\t - %(message)s')
+
+    def test_make_start_with_hashtag(self):
+        raw_str = "hello, this is\ntest for\nhashtag..."
+        from git_ext.utils import make_start_with_hashtag
+        result = make_start_with_hashtag(raw_str)
+        assert result == "#hello, this is\n#test for\n#hashtag..."

@@ -32,7 +32,7 @@ def get_commit_editmsg_abs_path():
 
 
 def get_commit_editmsg_bak_abs_path():
-    back_commit_file_path = os.path.join(get_dotgit_abs_path(), 'COMMIT_EDITMSG.get_ext.bak')
+    back_commit_file_path = os.path.join(get_dotgit_abs_path(), 'COMMIT_EDITMSG.git_ext.bak')
     return back_commit_file_path
 
 
