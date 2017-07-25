@@ -77,6 +77,7 @@ class BitbucketRemote(Remote):
                                                         repo_slug=self.repo_name,
                                                         pull_request_id=pr_id),
                             auth=self.user.auth).json()
+        logger.info(resp)
         activities = []
         for activity in resp['values']:
             if 'comment' in activity:
@@ -88,6 +89,7 @@ class BitbucketRemote(Remote):
                              )
                 )
             elif 'update' in activity:
+                logger.info(activity)
                 activities.append(
                     Activity(activity['update']['author']['username'],
                              '[' + activity['update']['state'] + ']' + activity['update']['title'],
@@ -97,10 +99,10 @@ class BitbucketRemote(Remote):
                 )
             elif 'approval' in activity:
                 activities.append(
-                    Activity(activity['update']['author']['username'],
+                    Activity(activity['approval']['user']['username'],
                              "Nice Work",
                              Activity.UPDATE_TYPE,
-                             activity['update']['date']
+                             activity['approval']['date']
                              )
                 )
             else:
