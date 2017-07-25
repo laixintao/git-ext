@@ -4,7 +4,7 @@ import os
 from codecs import open
 from setuptools import setup, find_packages
 
-VERSION = '0.2.22'
+VERSION = '0.2.23'
 DESCRIPTION = 'A git extension that allows you submit pullrequests from command line.'
 
 here = os.path.abspath(os.path.dirname(__file__))
