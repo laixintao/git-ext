@@ -41,7 +41,7 @@ def get_repo_slug():
     git_config = os.path.join(repo_abspath, '.git/config')
     with open(git_config, 'r') as git_config_file:
         content = git_config_file.read()
-        matcher = re.search(r"bitbucket.org[:/]([a-zA-Z_]+)/([a-zA-Z_-]+).git", content)
+        matcher = re.search(r"bitbucket.org[:/]([a-zA-Z_]+)/([a-zA-Z_-]+)(\.git)?", content)
         username = matcher.group(1)
         repo_slug = matcher.group(2)
         logger.info("username: {}, repo_slug: {}".format(username, repo_slug))
