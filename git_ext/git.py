@@ -38,12 +38,12 @@ def get_commit_editmsg_bak_abs_path():
 
 def get_repo_slug():
     repo_abspath = get_repo_abspath()
-    repo_slug = os.path.basename(repo_abspath)
     git_config = os.path.join(repo_abspath, '.git/config')
     with open(git_config, 'r') as git_config_file:
         content = git_config_file.read()
-        matcher = re.search(r"git@bitbucket.org:([a-zA-Z_]+)/{}.git".format(repo_slug), content)
+        matcher = re.search(r"bitbucket.org[:/]([a-zA-Z_]+)/([a-zA-Z_]+).git", content)
         username = matcher.group(1)
+        repo_slug = matcher.group(2)
         logger.info("username: {}, repo_slug: {}".format(username, repo_slug))
     return username, repo_slug
 

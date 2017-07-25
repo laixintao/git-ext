@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # pylint: disable=invalid-name, no-value-for-parameter, unexpected-keyword-arg
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import
 
 import os
 import json
@@ -77,7 +77,7 @@ def create(ctx, source_branch, destination_branch):
     pr = PullRequest('', source_branch, destination_branch, remote.user.username, final_reviewers, title, desc)
     resp = remote.submit_new_pr(pr)
     if resp.status_code == 201:
-        # delete backup commit file
+        # success: delete backup commit file
         os.remove(get_commit_editmsg_bak_abs_path())
         click.echo(click.style("201 Created!", fg='green'))
         click.echo(pr)

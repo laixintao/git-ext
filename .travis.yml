@@ -4,7 +4,8 @@ python:
 # command to install dependencies
 install:
         - cp ./git_ext/static/CONFIG_TEMPLATE.yml ~/.git_ext.yml
-        -  git clone https://bitbucket.org/boson_laixintao/test-gitext ~/test-gitext
+        - git clone https://bitbucket.org/boson_laixintao/test-gitext ~/test-gitext
+        - git config --global core.editor vi
         - export TEST_GIT_PATH=~/test-gitext
         - pip install -r requirements.txt
         - pip install pytest-cov
