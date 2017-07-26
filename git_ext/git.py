@@ -89,7 +89,7 @@ def restore_commit_file():
 def read_commit_editmsg_file(pr_submit_file):
     with open(pr_submit_file, 'r') as commit_file:
         lines = commit_file.readlines()
-        lines = [line for line in lines if not line.startswith('#')]
+        lines = [line for line in lines if not line.startswith('#') and line.strip()]
         logger.info(lines)
         # if all lines are empty, abort pr
         for line in lines:
