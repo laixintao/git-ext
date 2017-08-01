@@ -8,6 +8,7 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 import re
+import codecs
 import commands
 import shutil
 from git_ext.utils import logging, make_start_with_hashtag
@@ -87,7 +88,7 @@ def restore_commit_file():
 
 
 def read_commit_editmsg_file(pr_submit_file):
-    with open(pr_submit_file, 'r') as commit_file:
+    with codecs.open(pr_submit_file, 'r', 'utf-8') as commit_file:
         lines = commit_file.readlines()
         lines = [line for line in lines if not line.startswith('#') and line.strip()]
         logger.info(lines)
