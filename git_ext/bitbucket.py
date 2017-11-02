@@ -25,6 +25,7 @@ class BitbucketRemote(Remote):
     PULLREQUESTS = BASE + '/2.0/repositories/{username}/{repo_slug}/pullrequests'
     ACTIVITY = BASE + '/2.0/repositories/{username}/{repo_slug}/pullrequests/activity'
     ACTIVITY_DETAIL = BASE + '/2.0/repositories/{username}/{repo_slug}/pullrequests/{pull_request_id}/activity'
+    PR_URL = "https://bitbucket.org/{username}/{repo_slug}/pull-requests/{_id}"
 
     def __init__(self):
         super(BitbucketRemote, self).__init__(get_bitbucket_user())
@@ -70,6 +71,14 @@ class BitbucketRemote(Remote):
                              auth=self.user.auth,
                              json=post_data)
         logger.info(resp.status_code)
+        logger.info(json.dumps(resp.json(), indent=2, ensure_ascii=False))
+        pr._id = resp.json()['id']
+        pr.pr_view_url = BitbucketRemote.PR_URL.format(
+            username=self.repo_username,
+            repo_slug=self.repo_name,
+            _id=pr._id
+        )
+
         return resp
 
     def get_activities(self, pr_id):

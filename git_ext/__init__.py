@@ -9,7 +9,7 @@ from abc import ABCMeta, abstractmethod
 from git_ext.utils import logging
 from git_ext.git import get_repo_slug
 
-PR_DISPLAY_FORMAT = "#{_id} {title}[{source_branch}->{dest_branch}]  by {author}"
+PR_DISPLAY_FORMAT = "#{_id} {title} [{source_branch}->{dest_branch}]  by {author}"
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,9 @@ class Activity(object):
 
 class PullRequest(object):
 
-    def __init__(self, _id, source_branch, dest_branch, author, reviewers, title, description):
+    def __init__(self, _id, source_branch, dest_branch,
+                 author, reviewers, title, description,
+                 pr_view_url=""):
         """
         :param reviewers: list consist of str
         others: string
@@ -58,6 +60,7 @@ class PullRequest(object):
         self.reviewers = reviewers
         self.title = title
         self.description = description
+        self.pr_view_url = pr_view_url
 
     def __str__(self):
         return PR_DISPLAY_FORMAT.format(**self.__dict__)

@@ -59,6 +59,8 @@ def create(ctx, source_branch, destination_branch):
     pr_submit_file = init_commit_editmsg_file(source_branch, destination_branch)
     os.system(get_git_core_editor() + " " + pr_submit_file)
     title, desc = read_commit_editmsg_file(pr_submit_file)
+    title = title.strip()
+    desc = desc.strip()
     if not title:
         click.echo("Title is blank.")
         raise click.Abort
@@ -79,9 +81,12 @@ def create(ctx, source_branch, destination_branch):
     if resp.status_code == 201:
         # success: delete backup commit file
         os.remove(get_commit_editmsg_bak_abs_path())
-        click.echo(click.style("201 Created!", fg='green'))
+        click.echo(click.style("201 Created!  ", fg='green'), nl=False)
         click.echo(pr)
         reviewers = [user['username'] for user in resp.json()['reviewers']]
+        click.echo(pr.pr_view_url)
+        if not reviewers:
+            reviewers = ['N/A']
         click.echo(click.style("Reviewers: ", fg='yellow') + " ".join(reviewers))
     else:
         click.echo(click.style("ERROR!", fg='red'))
