@@ -20,6 +20,7 @@ class User(object):
         self.password = password
         self.auth = HTTPBasicAuth(self.username, self.password)
 
+
 class Activity(object):
     "Pull request's activity, like comment, approval etc"
 
