@@ -4,9 +4,15 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 import os
+import subprocess
 import yaml
 
 logger = logging.getLogger(__name__)
+
+
+def shell_run(*args):
+    """run command on shell, return unicode"""
+    return subprocess.check_output(shell=True, *args).decode('utf-8').strip()
 
 
 def get_config():

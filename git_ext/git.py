@@ -9,18 +9,12 @@ from __future__ import absolute_import, unicode_literals
 import os
 import re
 import codecs
-import subprocess
 import shutil
-from git_ext.utils import logging, make_start_with_hashtag
+from git_ext.utils import logging, make_start_with_hashtag, shell_run
 
 DEFAULT_PR_TEMPLATE_PATH = 'static/PR_SUBMIT_TEMPLATE'
 SCRIPT_PATH = os.path.split(os.path.realpath(__file__))[0]
 logger = logging.getLogger(__name__)
-
-
-def shell_run(*args):
-    """run command on shell, return unicode"""
-    return subprocess.check_output(shell=True, *args).decode('utf-8').strip()
 
 
 def git(*args):
