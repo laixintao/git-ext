@@ -4,7 +4,8 @@ import unittest
 import os
 import mock
 import json
-import __builtin__
+
+from six.moves import input
 
 from click.testing import CliRunner
 
@@ -17,7 +18,7 @@ class PullRequestTestCase(unittest.TestCase):
         self.runner = CliRunner()
 
     @mock.patch('requests.post')
-    @mock.patch.object(__builtin__, 'raw_input')
+    @mock.patch.object('six.moves', 'input')
     @mock.patch('os.system')
     def test_pull_request_create(self, mock_system, mock_raw_input, mock_post):
         from git_ext.git import SCRIPT_PATH

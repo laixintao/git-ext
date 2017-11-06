@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import os
 import yaml
 import click
+from six.moves import input
 
 SCRIPT_PATH = os.path.split(os.path.realpath(__file__))[0]
 DEFAULT_CONFIG_PATH = os.path.join(SCRIPT_PATH, "../static/CONFIG_TEMPLATE.yml")
@@ -15,8 +16,8 @@ def main():
     with open(DEFAULT_CONFIG_PATH) as default_config:
         config = yaml.load(default_config)
         click.echo("Init git-ext config... The config file saved in ~/.git_ext.yml, you can change it later")
-        email = raw_input("Your bitbucket email: ")
-        password = raw_input("Your bitbucket password: ")
+        email = input("Your bitbucket email: ")
+        password = input("Your bitbucket password: ")
         config['bitbucket']['email'] = email
         config['bitbucket']['password'] = password
         output_file = yaml.dump(config)

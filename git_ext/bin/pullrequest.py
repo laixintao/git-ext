@@ -7,6 +7,7 @@ import os
 import json
 
 import click
+from six.moves import input
 
 from git_ext.utils import logging, get_reviewers_group, check_reviewers_group
 from git_ext.git import get_git_core_editor, backup_commit_file
@@ -76,7 +77,7 @@ def create(ctx, source_branch, destination_branch):
             click.echo("{}={}".format(group, member))
     else:
         click.echo("No reviewers group found, you can custom reviewers group in ~/.git_ext.yml")
-    reviewers_raw = raw_input("Reviewers(start with @):")
+    reviewers_raw = input("Reviewers(start with @):")
     final_reviewers = check_reviewers_group(reviewers_raw)
 
     remote = ctx.obj['remote']
