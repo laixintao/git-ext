@@ -99,9 +99,11 @@ def create(ctx, source_branch, destination_branch):
         if not reviewers:
             reviewers = ['N/A']
         click.echo(click.style("Reviewers: ", fg='yellow') + " ".join(reviewers))
+        return 0
     else:
         click.echo(click.style("ERROR!", fg='red'))
         click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))
+        return -1
 
 
 def main():
