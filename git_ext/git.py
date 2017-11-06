@@ -75,8 +75,8 @@ def init_commit_editmsg_file(source_branch, destination_branch):
 
 
 def init_commit_template(source_branch, destination_branch):
-    with open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r') as template:
-        with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
+    with codecs.open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r', 'utf-8') as template:
+        with codecs.open(get_commit_editmsg_abs_path(), encoding='utf-8', mode='w+') as commit_edit_msg:
             template_content = template.read()
             
             commit_log = git(
@@ -84,6 +84,11 @@ def init_commit_template(source_branch, destination_branch):
                 "{} ^{}".format(source_branch, destination_branch),
                 "--pretty=format:' %h: %s'")
             diff_stat = shell_run("git diff {} --stat".format(destination_branch))
+            logger.debug(type(template_content))
+            logger.debug(type(source_branch))
+            logger.debug(type(commit_log))
+            logger.debug(type(commit_log))
+            logger.debug(type(diff_stat))
             template_content = template_content.format(source_branch=source_branch,
                                                        destination_branch=destination_branch,
                                                        COMMIT_LOG=make_start_with_hashtag(commit_log),

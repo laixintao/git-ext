@@ -50,12 +50,12 @@ def make_start_with_hashtag(raw_content):
     # TODO not test in windows
     lines = raw_content.split(os.linesep)
     result = ""
-    logger.info("lines")
     for line in lines[:-1]:
         logger.info(line)
         if line.strip():
             result = result + '#' + line + os.linesep
     result = result + '#' + lines[-1]  # no linesep in last line
+    logger.info(type(result))
     return result
 
 config_log()
