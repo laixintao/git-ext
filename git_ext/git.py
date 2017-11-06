@@ -9,7 +9,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 import re
 import codecs
-import commands
+import subprocess
 import shutil
 from git_ext.utils import logging, make_start_with_hashtag
 
@@ -18,8 +18,13 @@ SCRIPT_PATH = os.path.split(os.path.realpath(__file__))[0]
 logger = logging.getLogger(__name__)
 
 
+def shell_run(*args):
+    """run command on shell, return unicode"""
+    return subprocess.check_output(shell=True, *args).decode('utf-8').strip()
+
+
 def get_repo_abspath():
-    status, repo_abspath = commands.getstatusoutput('git rev-parse --show-toplevel')
+    repo_abspath = shell_run('git rev-parse --show-toplevel')
     return repo_abspath
 
 
@@ -50,7 +55,7 @@ def get_repo_slug():
 
 
 def get_git_core_editor():
-    editor = commands.getoutput('git config --global core.editor')
+    editor = shell_run('git config --global core.editor')
     logger.debug("Core editor: {}".format(editor))
     return editor
 
@@ -69,9 +74,9 @@ def init_commit_template(source_branch, destination_branch):
     with open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r') as template:
         with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
             template_content = template.read().decode('utf-8')
-            commit_log = commands.getoutput(
-                "git log {}:{} --pretty=format:' %h: %s'".format(destination_branch, destination_branch)).decode('utf-8')
-            diff_stat = commands.getoutput("git diff {} --stat".format(destination_branch)).decode('utf-8')
+            commit_log = shell_run(
+                "git log {}:{} --pretty=format:' %h: %s'".format(destination_branch, destination_branch))
+            diff_stat = shell_run("git diff {} --stat".format(destination_branch))
             template_content = template_content.format(source_branch=source_branch,
                                                        destination_branch=destination_branch,
                                                        COMMIT_LOG=make_start_with_hashtag(commit_log),
