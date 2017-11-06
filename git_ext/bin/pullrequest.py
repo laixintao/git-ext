@@ -51,6 +51,19 @@ def activity(ctx, id):
         click.echo(activity.to_echo())
 
 
+def print_and_get_reviewers():
+    reviewers_group = get_reviewers_group()
+    if reviewers_group:
+        click.echo("Custom groups:")
+        for group, member in reviewers_group.items():
+            click.echo("\t{}={}".format(group, member))
+    else:
+        click.echo("No reviewers group found, you can custom reviewers group in ~/.git_ext.yml")
+    reviewers_raw = input("Reviewers(start with @):")
+    final_reviewers = check_reviewers_group(reviewers_raw)
+    return final_reviewers
+
+
 @pullrequests.command()
 @click.pass_context
 @click.argument('source_branch')
@@ -70,15 +83,7 @@ def create(ctx, source_branch, destination_branch):
     # backup commit file
     backup_commit_file()
 
-    reviewers_group = get_reviewers_group()
-    if reviewers_group:
-        click.echo("Custom groups:")
-        for group, member in reviewers_group.items():
-            click.echo("{}={}".format(group, member))
-    else:
-        click.echo("No reviewers group found, you can custom reviewers group in ~/.git_ext.yml")
-    reviewers_raw = input("Reviewers(start with @):")
-    final_reviewers = check_reviewers_group(reviewers_raw)
+    final_reviewers = print_and_get_reviewers()
 
     remote = ctx.obj['remote']
     pr = PullRequest('', source_branch, destination_branch, remote.user.username, final_reviewers, title, desc)
