@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def shell_run(*args):
     """run command on shell, return unicode"""
-    return subprocess.check_output(shell=True, *args).decode('utf-8').strip()
+    return subprocess.check_output(shell=True, *args).decode('utf-8').rstrip('\n')
 
 
 def get_config():
@@ -55,7 +55,6 @@ def make_start_with_hashtag(raw_content):
         if line.strip():
             result = result + '#' + line + os.linesep
     result = result + '#' + lines[-1]  # no linesep in last line
-    logger.info(type(result))
     return result
 
 config_log()

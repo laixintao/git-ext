@@ -84,11 +84,6 @@ def init_commit_template(source_branch, destination_branch):
                 "{} ^{}".format(source_branch, destination_branch),
                 "--pretty=format:' %h: %s'")
             diff_stat = shell_run("git diff {} --stat".format(destination_branch))
-            logger.debug(type(template_content))
-            logger.debug(type(source_branch))
-            logger.debug(type(commit_log))
-            logger.debug(type(commit_log))
-            logger.debug(type(diff_stat))
             template_content = template_content.format(source_branch=source_branch,
                                                        destination_branch=destination_branch,
                                                        COMMIT_LOG=make_start_with_hashtag(commit_log),
