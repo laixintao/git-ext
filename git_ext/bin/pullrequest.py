@@ -56,16 +56,19 @@ def activity(ctx, id):
 @click.argument('destination_branch')
 def create(ctx, source_branch, destination_branch):
     logger.info("base branch: {}, head branch: {}".format(source_branch, destination_branch))
+
     pr_submit_file = init_commit_editmsg_file(source_branch, destination_branch)
+
     os.system(get_git_core_editor() + " " + pr_submit_file)
     title, desc = read_commit_editmsg_file(pr_submit_file)
-    title = title.strip()
-    desc = desc.strip()
+
     if not title:
         click.echo("Title is blank.")
         raise click.Abort
+
     # backup commit file
     backup_commit_file()
+
     reviewers_group = get_reviewers_group()
     if reviewers_group:
         click.echo("Custom groups:")
@@ -75,8 +78,10 @@ def create(ctx, source_branch, destination_branch):
         click.echo("No reviewers group found, you can custom reviewers group in ~/.git_ext.yml")
     reviewers_raw = raw_input("Reviewers(start with @):")
     final_reviewers = check_reviewers_group(reviewers_raw)
+
     remote = ctx.obj['remote']
     pr = PullRequest('', source_branch, destination_branch, remote.user.username, final_reviewers, title, desc)
+
     resp = remote.submit_new_pr(pr)
     if resp.status_code == 201:
         # success: delete backup commit file

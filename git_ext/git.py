@@ -100,4 +100,4 @@ def read_commit_editmsg_file(pr_submit_file):
             return "", ""
         title = lines[0]
         desc = "".join(lines[1:])
-    return title, desc
+    return title.strip(), desc.strip()
