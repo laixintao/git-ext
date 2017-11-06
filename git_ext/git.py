@@ -70,7 +70,7 @@ def init_commit_template(source_branch, destination_branch):
         with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
             template_content = template.read().decode('utf-8')
             commit_log = commands.getoutput(
-                "git log --branches --not {} --pretty=format:' %h: %s'".format(destination_branch)).decode('utf-8')
+                "git log {}:{} --pretty=format:' %h: %s'".format(destination_branch, destination_branch)).decode('utf-8')
             diff_stat = commands.getoutput("git diff {} --stat".format(destination_branch)).decode('utf-8')
             template_content = template_content.format(source_branch=source_branch,
                                                        destination_branch=destination_branch,
