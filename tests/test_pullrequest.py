@@ -2,7 +2,10 @@
 
 import unittest
 import os
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 import json
 
 from six.moves import input
