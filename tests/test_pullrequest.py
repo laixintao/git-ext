@@ -42,4 +42,5 @@ class PullRequestTestCase(unittest.TestCase):
         mock_post.return_value = resp
         obj = {'remote': get_remote()}
         result = self.runner.invoke(create, ['test_a', 'master'], obj=obj)
+        print(result.output)
         assert result.exit_code == 0

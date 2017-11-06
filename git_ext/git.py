@@ -23,6 +23,16 @@ def shell_run(*args):
     return subprocess.check_output(shell=True, *args).decode('utf-8').strip()
 
 
+def git(*args):
+    """run git command"""
+    repo_abspath = get_repo_abspath()
+    gd = '--git-dir=' + os.path.join(repo_abspath, '.git')
+    wt = '--work-tree=' + repo_abspath
+    commands = " ".join(["git", gd, wt] + list(args))
+    result = shell_run(commands)
+    return result
+
+
 def get_repo_abspath():
     repo_abspath = shell_run('git rev-parse --show-toplevel')
     return repo_abspath
@@ -74,8 +84,11 @@ def init_commit_template(source_branch, destination_branch):
     with open(os.path.join(SCRIPT_PATH, DEFAULT_PR_TEMPLATE_PATH), 'r') as template:
         with open(get_commit_editmsg_abs_path(), 'w') as commit_edit_msg:
             template_content = template.read()
-            commit_log = shell_run(
-                "git log {}...{} --pretty=format:' %h: %s'".format(source_branch, destination_branch))
+            
+            commit_log = git(
+                "log",
+                "{} ^{}".format(source_branch, destination_branch),
+                "--pretty=format:' %h: %s'")
             diff_stat = shell_run("git diff {} --stat".format(destination_branch))
             template_content = template_content.format(source_branch=source_branch,
                                                        destination_branch=destination_branch,

@@ -5,11 +5,15 @@ python:
         - "3.6"
 # command to install dependencies
 install:
+        - pip install -r requirements.txt
+        - CURRENT_DIR=`pwd`
+        - pwd
         - cp ./git_ext/static/CONFIG_TEMPLATE.yml ~/.git_ext.yml
         - git clone https://bitbucket.org/boson_laixintao/test-gitext ~/test-gitext
+        - cd ~/test-gitext && git checkout -b test_a origin/test_a
+        - cd $CURRENT_DIR
         - git config --global core.editor vi
         - export TEST_GIT_PATH=~/test-gitext
-        - pip install -r requirements.txt
         - pip install pytest-cov
         - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then travis_retry pip install mock; fi
 # command to run tests
