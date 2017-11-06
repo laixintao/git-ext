@@ -21,7 +21,7 @@ class PullRequestTestCase(unittest.TestCase):
         self.runner = CliRunner()
 
     @mock.patch('requests.post')
-    @mock.patch.object('six.moves', 'input')
+    @mock.patch('six.moves.input')
     @mock.patch('os.system')
     def test_pull_request_create(self, mock_system, mock_raw_input, mock_post):
         from git_ext.git import SCRIPT_PATH
@@ -32,6 +32,7 @@ class PullRequestTestCase(unittest.TestCase):
         def write_commit_msg(path):
             with open(commit_msg_path, 'w') as cmt:
                 cmt.write("title test\ndescription")
+
         mock_system.side_effect = write_commit_msg
         with open(os.path.join(SCRIPT_PATH, '../tests/fixture/create_pr_success_response.json'), 'r') as resp_file:
             resp = requests.Response()
