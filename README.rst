@@ -12,6 +12,9 @@ git-ext
 
 A git extension that allows you submit pullrequests from command line.
 
+.. image :: https://asciinema.org/a/gWZNPXthrS9gpeDOaf5FTd0ak.png
+    :target: https://asciinema.org/a/gWZNPXthrS9gpeDOaf5FTd0ak
+
 Current support bitbucket only, add github and gitlab in the future.
 
 install
