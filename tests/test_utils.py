@@ -46,13 +46,6 @@ class GitExtUtilsTest(unittest.TestCase):
         assert config['bitbucket']['email']
         assert config['bitbucket']['password']
 
-    @mock.patch.dict(os.environ, {'GITEXT':''})
-    def test_config_log_no_debug(self):
-        from git_ext.utils import config_log
-        import logging
-        config_log()
-        assert logging.getLogger().getEffectiveLevel() == logging.ERROR
-
     @mock.patch.dict(os.environ, {'GITEXT':'debug'})
     @mock.patch('logging.basicConfig')
     def test_config_log_debug(self, mock_logging):
