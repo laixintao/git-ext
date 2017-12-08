@@ -48,7 +48,8 @@ class GitExtUtilsTest(unittest.TestCase):
 
     @mock.patch.dict(os.environ, {'GITEXT':''})
     def test_config_log_no_debug(self):
-        from git_ext.utils import logging, config_log
+        from git_ext.utils import config_log
+        import logging
         config_log()
         assert logging.getLogger().getEffectiveLevel() == logging.ERROR
 
