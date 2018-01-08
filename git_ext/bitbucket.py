@@ -72,13 +72,16 @@ class BitbucketRemote(Remote):
                              json=post_data)
         logger.info(resp.status_code)
         logger.info(json.dumps(resp.json(), indent=2, ensure_ascii=False))
-        if resp.status_code == 201:
+        if resp.status_code == 201 and 'id' in resp.json():
             pr._id = resp.json()['id']
             pr.pr_view_url = BitbucketRemote.PR_URL.format(
                 username=self.repo_username,
                 repo_slug=self.repo_name,
                 _id=pr._id
             )
+        else:
+            print(resp.json())
+            raise Exception("PR create failed")
 
         return resp
 
