@@ -2,6 +2,8 @@
 git-ext
 =======
 
+Create PullRequest, view activities/discussion from command line.
+
 .. image :: https://img.shields.io/badge/pypi-v0.1-green.svg
     :target: https://pypi.python.org/pypi/git-ext
 .. image :: https://img.shields.io/codecov/c/github/laixintao/git-ext.svg
@@ -15,7 +17,14 @@ A git extension that allows you submit pullrequests from command line.
 .. image :: https://asciinema.org/a/gWZNPXthrS9gpeDOaf5FTd0ak.png
     :target: https://asciinema.org/a/gWZNPXthrS9gpeDOaf5FTd0ak
 
-Current support bitbucket only, add github and gitlab in the future.
+Current support:
+
+- gitlab
+- bitbucket
+
+To support:
+
+- github
 
 install
 -------
@@ -28,18 +37,16 @@ Then run init-git-ext command to write your bitbucket account infomation to ~/.g
 
     init-git-ext
 
-Or edit `~/.git_ext.yml` by hand:
+Or edit `~/.git_ext.yml` by hand: ::
 
-```
-bitbucket:
-  email: ''
-  password: ''
-gitlab:
-  domain: ""
-  private_token: ""
-git_ext:
-  logging: {format: '%(name)s - %(message)s', level: DEBUG}
-```
+   bitbucket:
+     email: ''
+     password: ''
+   gitlab:
+     domain: ""
+     private_token: ""
+   git_ext:
+     logging: {format: '%(name)s - %(message)s', level: DEBUG}
 
 Optional
 --------
