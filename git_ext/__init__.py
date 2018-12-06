@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals, absolute_import
 
-from requests.auth import  HTTPBasicAuth
+from requests.auth import HTTPBasicAuth
 import arrow
 import click
 from abc import ABCMeta, abstractmethod
@@ -21,12 +21,13 @@ class User(object):
             self.password = password
             self.auth = HTTPBasicAuth(self.username, self.password)
 
+
 class Activity(object):
     "Pull request's activity, like comment, approval etc"
 
-    COMMENT_TYPE = 'comment'
-    APPROVAL_TYPE = 'approve'
-    UPDATE_TYPE = 'update'
+    COMMENT_TYPE = "comment"
+    APPROVAL_TYPE = "approve"
+    UPDATE_TYPE = "update"
 
     def __init__(self, username, content, type, time):
         self.type = type
@@ -38,18 +39,28 @@ class Activity(object):
         pass
 
     def to_echo(self):
-        echo_user = click.style(self.username, fg='green')
-        echo_action_time = click.style(" {} this PR {}:".format(self.type,
-                                                                arrow.get(self.time).humanize(), fg='yellow'))
-        display = echo_user + ' ' + echo_action_time + '\n' + self.content
+        echo_user = click.style(self.username, fg="green")
+        echo_action_time = click.style(
+            " {} this PR {}:".format(
+                self.type, arrow.get(self.time).humanize(), fg="yellow"
+            )
+        )
+        display = echo_user + " " + echo_action_time + "\n" + self.content
         return display
 
 
 class PullRequest(object):
-
-    def __init__(self, _id, source_branch, dest_branch,
-                 author, reviewers, title, description,
-                 pr_view_url=""):
+    def __init__(
+        self,
+        _id,
+        source_branch,
+        dest_branch,
+        author,
+        reviewers,
+        title,
+        description,
+        pr_view_url="",
+    ):
         """
         :param reviewers: list consist of str
         others: string

@@ -15,7 +15,7 @@ from git_ext.git import (
     init_commit_editmsg_file,
     read_commit_editmsg_file,
     get_commit_editmsg_bak_abs_path,
-    get_remote_host
+    get_remote_host,
 )
 from git_ext import PullRequest
 from git_ext.bitbucket import BitbucketRemote
@@ -28,8 +28,7 @@ current_path = os.getcwd()
 def get_remote():
     remote_host = get_remote_host()
     logger.debug(f"Host is {remote_host}")
-    return {"bitbucket": BitbucketRemote(),
-            "gitlab": GitlabRemote()}[remote_host]
+    return {"bitbucket": BitbucketRemote(), "gitlab": GitlabRemote()}[remote_host]
 
 
 @click.group()

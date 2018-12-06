@@ -15,10 +15,11 @@ class GitlabRemote(Remote):
         domain = config["gitlab"]["domain"]
 
         self.session = requests.Session()
-        self.session.headers={"PRIVATE-TOKEN": token}
+        self.session.headers = {"PRIVATE-TOKEN": token}
         self.repo_id = f"{self.repo_username}%2F{self.repo_name}"
         self.pull_request_url = self.PULL_REQUESTS_URL.format(
-            domain=domain, repo=self.repo_id)
+            domain=domain, repo=self.repo_id
+        )
 
     def submit_new_pr(self, pr):
         resp = self.session.post(

@@ -21,6 +21,7 @@ git checkout master &&
 git branch -D test_chinese
 """
 
+
 @pytest.fixture(scope="function")
 def chinese_branch():
     status = subprocess.check_call(NEW_BRANCK_COMMAND, shell=True)
