@@ -28,6 +28,19 @@ Then run init-git-ext command to write your bitbucket account infomation to ~/.g
 
     init-git-ext
 
+Or edit `~/.git_ext.yml` by hand:
+
+```
+bitbucket:
+  email: ''
+  password: ''
+gitlab:
+  domain: ""
+  private_token: ""
+git_ext:
+  logging: {format: '%(name)s - %(message)s', level: DEBUG}
+```
+
 Optional
 --------
 
