@@ -15,17 +15,21 @@ from git_ext.git import (
     init_commit_editmsg_file,
     read_commit_editmsg_file,
     get_commit_editmsg_bak_abs_path,
+    get_remote_host
 )
 from git_ext import PullRequest
 from git_ext.bitbucket import BitbucketRemote
+from git_ext.gitlab import GitlabRemote
 
 logger = logging.getLogger(__name__)
 current_path = os.getcwd()
 
 
 def get_remote():
-    # TODO determine which remote to use
-    return BitbucketRemote()
+    remote_host = get_remote_host()
+    logger.debug(f"Host is {remote_host}")
+    return {"bitbucket": BitbucketRemote(),
+            "gitlab": GitlabRemote()}[remote_host]
 
 
 @click.group()
@@ -92,10 +96,12 @@ def create(ctx, source_branch, destination_branch):
 
     # backup commit file
     backup_commit_file()
-
-    final_reviewers = print_and_get_reviewers()
-
     remote = ctx.obj["remote"]
+
+    if remote == "bitbucket":
+        final_reviewers = print_and_get_reviewers()
+    else:
+        final_reviewers = []
     pr = PullRequest(
         "",
         source_branch,
@@ -112,12 +118,13 @@ def create(ctx, source_branch, destination_branch):
         os.remove(get_commit_editmsg_bak_abs_path())
         click.echo(click.style("201 Created!  ", fg="green"), nl=False)
         click.echo(pr)
-        reviewers = [user["username"] for user in resp.json()["reviewers"]]
-        click.echo(pr.pr_view_url)
-        if not reviewers:
-            reviewers = ["N/A"]
-        click.echo(click.style("Reviewers: ", fg="yellow") + " ".join(reviewers))
-        return 0
+        if remote == "bitbucket":  # gitlab has no reviewers function
+            reviewers = [user["username"] for user in resp.json()["reviewers"]]
+            click.echo(pr.pr_view_url)
+            if not reviewers:
+                reviewers = ["N/A"]
+            click.echo(click.style("Reviewers: ", fg="yellow") + " ".join(reviewers))
+            return 0
     else:
         click.echo(click.style("ERROR!", fg="red"))
         click.echo(json.dumps(resp.json(), indent=2, sort_keys=True))

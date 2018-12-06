@@ -15,10 +15,11 @@ logger = logging.getLogger(__name__)
 
 
 class User(object):
-    def __init__(self, username, password):
+    def __init__(self, username, password=None):
         self.username = username
-        self.password = password
-        self.auth = HTTPBasicAuth(self.username, self.password)
+        if password:
+            self.password = password
+            self.auth = HTTPBasicAuth(self.username, self.password)
 
 class Activity(object):
     "Pull request's activity, like comment, approval etc"
@@ -71,13 +72,17 @@ class Remote(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, user):
+    def __init__(self, user=None):
         """
         :param user: User
         :param repo_username, repo_name: for url formatting, like laixintao/git-ext.
         """
-        self.user = user
+
         self.repo_username, self.repo_name = get_repo_slug()
+        if user:
+            self.user = user
+        else:
+            self.user = User(self.repo_username)
 
     @abstractmethod
     def get_all_pullrequests(self):
