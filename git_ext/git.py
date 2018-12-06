@@ -53,10 +53,10 @@ def get_repo_slug():
     git_config = os.path.join(repo_abspath, ".git/config")
     with open(git_config, "r") as git_config_file:
         content = git_config_file.read()
-        matcher = re.search(r"git@(.*)[:/]([a-zA-Z_]+)/([a-zA-Z_-]+)(\.git)?", content)
-        domain = matcher.group(1)
-        username = matcher.group(2)
-        repo_slug = matcher.group(3)
+        matcher = re.search(r"(git@|https://)(.*)[:/]([a-zA-Z_]+)/([a-zA-Z_-]+)(\.git)?", content)
+        domain = matcher.group(2)
+        username = matcher.group(3)
+        repo_slug = matcher.group(4)
         logger.info(
             "domain:{}, username: {}, repo_slug: {}".format(domain, username, repo_slug)
         )
