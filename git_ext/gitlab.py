@@ -32,5 +32,4 @@ class GitlabRemote(Remote):
                 "description": pr.description,
             },
         )
-        print(resp.json())
         return resp
