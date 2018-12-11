@@ -117,9 +117,9 @@ def create(ctx, source_branch, destination_branch):
         os.remove(get_commit_editmsg_bak_abs_path())
         click.echo(click.style("201 Created!  ", fg="green"), nl=False)
         click.echo(pr)
+        click.echo(pr.pr_view_url)
         if remote == "bitbucket":  # gitlab has no reviewers function
             reviewers = [user["username"] for user in resp.json()["reviewers"]]
-            click.echo(pr.pr_view_url)
             if not reviewers:
                 reviewers = ["N/A"]
             click.echo(click.style("Reviewers: ", fg="yellow") + " ".join(reviewers))
